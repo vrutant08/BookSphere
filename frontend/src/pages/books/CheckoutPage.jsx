@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCreateOrderMutation } from '../../redux/features/orders/ordersApi';
+import Swal from 'sweetalert2';
 
 const CheckoutPage = () => {
     const cartItems = useSelector(state => state.cart.cartItems);
@@ -32,10 +33,19 @@ const CheckoutPage = () => {
 
         try {
             await createOrder(newOrder).unwrap();
-            alert("Order created successfully");
+            Swal.fire({
+                icon: 'success',
+                title: 'Order placed successfully',
+                showConfirmButton: false,
+                timer: 1500
+            });
         } catch (error) {
             console.error("Error creating an order", error);
-            alert("Failed to create an order");
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed to place the order',
+                text: 'Please try again later.',
+            });
         }
     };
 
